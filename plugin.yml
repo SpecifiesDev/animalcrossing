@@ -1,0 +1,13 @@
+main: me.specifies.AnimalCrossing.Main
+version: 1.0
+author: SpecifiesDev
+name: AnimalCrossing
+api-version: 1.16
+
+commands:
+    bells:
+        usage: /bells
+        description: Tells a player how many bells they have.
+    setbells:
+        usage: /setbells [player] [bells]
+        description: Allows a superadmin to change how many bells a player has.
