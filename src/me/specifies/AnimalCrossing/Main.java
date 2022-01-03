@@ -2,7 +2,6 @@ package me.specifies.AnimalCrossing;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +27,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin {
 	
+	// instance of this class
 	private static Main instance;
 	
+	// instance of our sqlmanager
 	private final SQLManager manager = new SQLManager(this.getConfig().getString("sql-lite-file"), this.getDataFolder());
 	
+	// instance of our parsed recipes
 	private HashMap<String, String[]> recipes = new HashMap<>();
 	
 	public void onEnable() {
@@ -70,6 +72,7 @@ public class Main extends JavaPlugin {
 	
 	public void onDisable() {
 		
+		// remove every player from our inventories tracking, and then close their inventory
 		for(Map.Entry<UUID, ScrollingInventory> entry : ScrollingInventory.users.entrySet()) {
 			
 			UUID u = entry.getKey();
@@ -81,7 +84,16 @@ public class Main extends JavaPlugin {
 			try { p.closeInventory(); } catch(Exception err) { /* No reason to log */}
 		}
 		
+		// nullify our instance
 		instance = null;
+	}
+	
+	/*
+	 * getters
+	 */
+	
+	public HashMap<String, String[]> getRecipes() {
+		return recipes;
 	}
 	
 	public static Main getInstance() {
@@ -92,37 +104,42 @@ public class Main extends JavaPlugin {
 		return manager;
 	}
 	
+	/*
+	 * public utility
+	 */
+	
 	public String color(String m) {
 		return ChatColor.translateAlternateColorCodes('&', m);
 	}
 	
 	public HashMap<Integer, String> processRecipe(String recipe) {
 		
-		
+		// split the parent string objects. i.e 1:x~2:b = [1:x, 2:b]
 		String[] parsed = recipe.split("~");
 		
+		// create a new hashmap to specify placement
 		HashMap<Integer, String> itemPlacement = new HashMap<Integer, String>();
 		
+		// loop through each parsed string.
 		for(String item: parsed) {
+			
+			// split each string further in order to grab the slot and material
 			String[] itemContainer = item.split(":");
 			
+			// parse the retrieved values and put them in the hashmap.
 			int slot = Integer.parseInt(itemContainer[0]);
 			String material = itemContainer[1];
-			
 			itemPlacement.put(slot, material);
 		}
 	
-		
+		// return the processed recipe
 		return itemPlacement;
 	}
 	
-	public HashMap<String, String[]> getRecipes() {
-		return recipes;
-	}
-	
 	/*
-	 * private  
+	 * private utility functions
 	 */
+	
 	private void registerCommands() {
 		
 		getCommand("info").setExecutor(new Bells());
@@ -144,15 +161,17 @@ public class Main extends JavaPlugin {
 	
 	private void processRecipes() {
 		
+		// loop through each recipe in our config.
 		for(String key : this.getConfig().getConfigurationSection("recipes").getKeys(false)) {
 			
+			// grab the necessary information
 			String name = this.getConfig().getString("recipes." + key + ".name");
 			String permission = this.getConfig().getString("recipes." + key + ".permission");
 			String itemType = this.getConfig().getString("recipes." + key + ".item");
 			List<String> items = this.getConfig().getStringList("recipes." + key + ".recipe");
 			
+			// loop through our stringlist of items in the grid, and convert them to a string for later manipulation.
 			String itemresult = "";
-			
 			int count = 0;
 			for(String item : items) {
 				count++;
@@ -160,9 +179,8 @@ public class Main extends JavaPlugin {
 				else itemresult += item + "~";
 			}
 			
+			// create a formatted array and put it in our recipse hashmap for later manipulation.
 			String[] formatted = {name, permission, itemType, itemresult};
-			
-			
 			recipes.put(ChatColor.stripColor(this.color(name)), formatted);
 		}
 		
