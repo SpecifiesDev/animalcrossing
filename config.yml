@@ -1,1 +1,46 @@
-sql-lite-file: players
+sql-lite-file: players.db
+
+recipes:
+    basicaxe:
+        name: "&3Basic Axe"
+        permission: animalcrossing.items.basicaxe
+        item: STONE_AXE
+        recipe:
+            - 0:COBBLESTONE
+            - 1:COBBLESTONE
+            - 3:COBBLESTONE
+            - 4:STICK
+            - 7:STICK
+    basicshovel:
+        name: "&3Basic Shovel"
+        permission: animalcrossing.items.basicshovel
+        item: STONE_SHOVEL
+        recipe:
+            - 1:COBBLESTONE
+            - 4:STICK
+            - 7:STICK
+    basicrod:
+        name: "&3Basic Rod"
+        permission: animalcrossing.items.basicrod
+        item: FISHING_ROD
+        recipe:
+            - 2:STICK
+            - 4:STICK
+            - 5:STRING
+            - 6:STICK
+            - 8:STRING
+    applesapling:
+        name: "&cApple Sapling"
+        permission: animalcrossing.items.applesapling
+        item: OAK_SAPLING
+        recipe:
+            - 0:WHEAT_SEEDS
+            - 1:WHEAT_SEEDS
+            - 2:WHEAT_SEEDS
+            - 3:WHEAT_SEEDS
+            - 4:APPLE
+            - 5:WHEAT_SEEDS
+            - 6:WHEAT_SEEDS
+            - 7:WHEAT_SEEDS
+            - 8:WHEAT_SEEDS
+

@@ -103,6 +103,38 @@ public class SQLManager {
 		
 	}
 	
+	public String getPlayerMiles(String uuid) throws SQLException {
+		String query = "SELECT nookmiles, uuid from animalcrossing WHERE uuid = ?";
+		
+		PreparedStatement stmt = this.format(query,  new String[] {uuid});
+		
+		ResultSet results = stmt.executeQuery();
+		
+		String result = "";
+		
+		while(results.next()) {
+			if(results.getString("uuid").equalsIgnoreCase(uuid)) {
+				result = results.getString("nookmiles");
+			}
+		}
+		
+		return result;
+	}
+	
+	public void setPlayerMiles(String uuid, String miles) {
+		
+		String query = "UPDATE animalcrossing SET nookmiles = ? WHERE uuid = ?";
+		
+		try {
+			PreparedStatement stmt = this.format(query, new String[] {miles, uuid});
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException err) {
+			err.printStackTrace();
+		}
+	}
+	
 	public void setPlayerBells(String uuid, String bells) {
 		
 		String query = "UPDATE animalcrossing SET bells = ? WHERE uuid = ?";

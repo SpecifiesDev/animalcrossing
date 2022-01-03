@@ -5,9 +5,15 @@ name: AnimalCrossing
 api-version: 1.16
 
 commands:
-    bells:
-        usage: /bells
-        description: Tells a player how many bells they have.
+    info:
+        usage: /info
+        description: Opens an inventory displaying a player's information.
     setbells:
         usage: /setbells [player] [bells]
         description: Allows a superadmin to change how many bells a player has.
+    setmiles:
+        usage: /setmiles [player] [miles]
+        description: Allows a superadmin to change how many miles a player has.
+    recipes:
+        usage: /recipes
+        description: Shows a player their unlocked recipes.
