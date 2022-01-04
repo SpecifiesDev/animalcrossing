@@ -98,74 +98,111 @@ public class PageTraversal implements Listener {
 
             // cancel the event so they can't take the item.
             e.setCancelled(true);
+            
+            
+            String inventoryTitle = ChatColor.stripColor(e.getView().getTitle());
 
             // get the raw name of the item clicked so we can query our hashmap for the recipe data.
             String clicked = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
 
-            // create an inventory object so we can construct the recipe inventory.
-            Inventory recipe = Bukkit.createInventory(null, 45, plugin.color("&cCrafting &7- &b" + clicked));
-
-            // create an item factory, starting with our filler object. add necessary data
-            ItemFactory factory = new ItemFactory(Material.BLACK_STAINED_GLASS_PANE, 1);
-            factory.setDisplayName(plugin.color("&9"));
-
-            // create a whitelist of slots to not fill. will also use these for placing the objects on the crafting grid.
-            ArrayList < Integer > whitelisted = new ArrayList < > (Arrays.asList(new Integer[] {
-                12,
-                13,
-                14,
-                21,
-                22,
-                23,
-                30,
-                31,
-                32
-            }));
-
-            // loop through the inventory size. if the slot isn't whitelisted, put our placeholder item.
-            for (int i = 0; i <= 44; i++) {
-                if (!whitelisted.contains(i)) recipe.setItem(i, factory.getItem()); 
-            }
-
-            // grab our recipe string for the clicked item
-            String recipeParse = plugin.getRecipes().get(clicked)[3];
-
-            // use our process recipe function to receive a hashmap in which to loop and populate our grid.
-            HashMap < Integer, String > parsedRecipes = plugin.processRecipe(recipeParse);
-
-            // loop through the hashmaps entries
-            for (Entry < Integer, String > entry: parsedRecipes.entrySet()) {
-
-                // we're going to retrieve the slot. this is in accordance to our whitelisted variable.
-                // so if the slot is 3, the actual index in the inventory will be 14.
-                int slot = entry.getKey();
-
-                // retrieve the material string
-                String material = entry.getValue();
-
-                // create an itemstack to populate.
-                ItemStack targetItem = new ItemStack(Material.valueOf(material), 1);
-
-                // populate the specified slot with the item.
-                recipe.setItem(whitelisted.get(slot), targetItem);
-
-            }
-
-            // add a close page button for quick exit
-            factory.setType(Material.RED_STAINED_GLASS_PANE);
-            factory.setDisplayName(plugin.color("&cCLOSE PAGE"));
-            recipe.setItem(40, factory.getItem());
+            Inventory generated = generateInventory(inventoryTitle, clicked);
 
             // because this is navigating the user outside of the scrollable page, we want to remove them so they can open another one later.
             ScrollingInventory.users.remove(p.getUniqueId());
 
             // close their inventory, and open the generated grid.
             p.closeInventory();
-            p.openInventory(recipe);
+            p.openInventory(generated);
 
 
         }
 
+    }
+    
+    private Inventory generateInventory(String title, String clicked) {
+    	
+    	// create our generation object
+    	Inventory generated = null;
+    	
+    	// inv we're manipulating
+    	String type = "";
+    	
+    	// if the traversal page is recipe shop, or recipes
+    	if(title.toLowerCase().contains("recipe shop")) {
+    		generated = Bukkit.createInventory(null, 45, plugin.color("&bPurchase Item &7- &b" + clicked));
+    		type = "buy";
+    	}
+    	else if(title.toLowerCase().contains("recipes")) {
+    		generated = Bukkit.createInventory(null, 45, plugin.color("&cCrafting &7- &b" + clicked));
+    		type = "recipe";
+    	}
+    		
+    	// create an item factory, starting with our filler object.
+    	ItemFactory factory = new ItemFactory(Material.BLACK_STAINED_GLASS_PANE, 1);
+    	factory.setDisplayName(plugin.color("&9"));
+    	
+    	//create a whitelist of slots to not fill. will also use these for placing the objects on the crafting grid.
+    	ArrayList<Integer> whitelisted = new ArrayList<>(Arrays.asList(new Integer[] {12, 13, 14, 21, 22, 23, 30, 31 ,32}));
+    	
+    	// loop through the inventory and place our filler on slots that aren't whitelisted
+    	for(int i = 0; i <= 44; i++) {
+    		if (!whitelisted.contains(i)) generated.setItem(i, factory.getItem()); 
+    	}
+    	
+    	// grab our recipe string for the clicked item
+    	String recipeParse = plugin.getRecipes().get(clicked)[3];
+    	
+    	// use our process function to receive a hashmap to loop and populate
+    	HashMap<Integer, String> parsedRecipes = plugin.processRecipe(recipeParse);
+    	
+    	// loop through the entries
+    	for(Entry <Integer, String> entry : parsedRecipes.entrySet()) {
+    		
+    		// we're going to retrieve the slot, in accordance to our whitelisted variable.
+    		int slot = entry.getKey();
+    		
+    		//retrieve the material string
+    		String material = entry.getValue();
+    		
+    		// create an itemstack to populate
+    		ItemStack targetItem = new ItemStack(Material.valueOf(material), 1);
+    		
+    		// populate the specified slot with the item.
+    		generated.setItem(whitelisted.get(slot), targetItem);
+    	}
+    	
+    	// if it's the purhcase inventory
+    	if(type.equals("buy")) {
+    		
+    		// cancel purchase
+    		factory.setType(Material.RED_STAINED_GLASS_PANE);
+    		factory.setDisplayName(plugin.color("&cCancel Purchase"));
+    		generated.setItem(39, factory.getItem());
+    		
+    		// displays cost
+    		factory.setType(Material.GOLD_INGOT);
+    		factory.setDisplayName(plugin.color("&eTotal Cost&8:"));
+    		factory.setLore(plugin.color("&e" + plugin.getRecipes().get(clicked)[4]));
+    		generated.setItem(40, factory.getItem());
+    		
+    		// confirm purchase
+    		factory.flush(Material.GREEN_STAINED_GLASS_PANE, 1);
+    		factory.setDisplayName(plugin.color("&aConfirm Purchase"));
+    		generated.setItem(41, factory.getItem());
+    		
+    	} 
+    	// if it's the recipe inventory
+    	else if(type.equals("recipe")) {
+    		
+    		factory.setType(Material.RED_STAINED_GLASS_PANE);
+    		factory.setDisplayName(plugin.color("&cCLOSE PAGE"));
+    		generated.setItem(40, factory.getItem());
+    		
+    	}
+    	
+    	// return the generated inventory
+    	return generated;
+    	
     }
 
 }

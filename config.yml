@@ -5,6 +5,7 @@ recipes:
         name: "&3Basic Axe"
         permission: animalcrossing.items.basicaxe
         item: STONE_AXE
+        cost: 500
         recipe:
             - 0:STONE
             - 1:STONE
@@ -15,6 +16,7 @@ recipes:
         name: "&3Basic Shovel"
         permission: animalcrossing.items.basicshovel
         item: STONE_SHOVEL
+        cost: 500
         recipe:
             - 1:STONE
             - 4:STICK
@@ -23,6 +25,7 @@ recipes:
         name: "&3Basic Rod"
         permission: animalcrossing.items.basicrod
         item: FISHING_ROD
+        cost: 500
         recipe:
             - 2:STICK
             - 4:STICK
@@ -33,6 +36,7 @@ recipes:
         name: "&cApple Sapling"
         permission: animalcrossing.items.applesapling
         item: OAK_SAPLING
+        cost: 1000
         recipe:
             - 0:WHEAT_SEEDS
             - 1:WHEAT_SEEDS

@@ -17,3 +17,6 @@ commands:
     recipes:
         usage: /recipes
         description: Shows a player their unlocked recipes.
+    recipeshop:
+        usage: /recipeshop
+        description: Opens a shop of recipes a player can purchase.

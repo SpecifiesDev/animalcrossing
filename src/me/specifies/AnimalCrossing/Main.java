@@ -17,9 +17,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.specifies.AnimalCrossing.Commands.Bells;
+import me.specifies.AnimalCrossing.Commands.RecipeShop;
 import me.specifies.AnimalCrossing.Commands.Recipes;
 import me.specifies.AnimalCrossing.Commands.SetBells;
 import me.specifies.AnimalCrossing.Commands.SetMiles;
+import me.specifies.AnimalCrossing.Events.CheckIfPlayerHasRecipe;
 import me.specifies.AnimalCrossing.Events.NewPlayerLogin;
 import me.specifies.AnimalCrossing.Events.PageTraversal;
 import me.specifies.AnimalCrossing.Events.PreventInventoryMovement;
@@ -154,6 +156,7 @@ public class Main extends JavaPlugin {
 		getCommand("setbells").setExecutor(new SetBells());
 		getCommand("setmiles").setExecutor(new SetMiles());
 		getCommand("recipes").setExecutor(new Recipes());
+		getCommand("recipeshop").setExecutor(new RecipeShop());
 		
 	}
 	
@@ -164,6 +167,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PreventInventoryMovement(), this);
 		pm.registerEvents(new PageTraversal(), this);
 		pm.registerEvents(new RemovePlayerInstances(), this);
+		pm.registerEvents(new CheckIfPlayerHasRecipe(), this);
 		
 	}
 	
@@ -176,6 +180,7 @@ public class Main extends JavaPlugin {
 			String name = this.getConfig().getString("recipes." + key + ".name");
 			String permission = this.getConfig().getString("recipes." + key + ".permission");
 			String itemType = this.getConfig().getString("recipes." + key + ".item");
+			String cost = this.getConfig().getString("recipes." + key + ".cost");
 			List<String> items = this.getConfig().getStringList("recipes." + key + ".recipe");
 			
 			// loop through our stringlist of items in the grid, and convert them to a string for later manipulation.
@@ -188,7 +193,7 @@ public class Main extends JavaPlugin {
 			}
 			
 			// create a formatted array and put it in our recipse hashmap for later manipulation.
-			String[] formatted = {name, permission, itemType, itemresult};
+			String[] formatted = {name, permission, itemType, itemresult, cost};
 			recipes.put(ChatColor.stripColor(this.color(name)), formatted);
 		}
 		
