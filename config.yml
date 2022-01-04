@@ -6,9 +6,9 @@ recipes:
         permission: animalcrossing.items.basicaxe
         item: STONE_AXE
         recipe:
-            - 0:COBBLESTONE
-            - 1:COBBLESTONE
-            - 3:COBBLESTONE
+            - 0:STONE
+            - 1:STONE
+            - 3:STONE
             - 4:STICK
             - 7:STICK
     basicshovel:
@@ -16,7 +16,7 @@ recipes:
         permission: animalcrossing.items.basicshovel
         item: STONE_SHOVEL
         recipe:
-            - 1:COBBLESTONE
+            - 1:STONE
             - 4:STICK
             - 7:STICK
     basicrod:
@@ -26,7 +26,7 @@ recipes:
         recipe:
             - 2:STICK
             - 4:STICK
-            - 5:STRING
+            - 5:STICK
             - 6:STICK
             - 8:STRING
     applesapling:

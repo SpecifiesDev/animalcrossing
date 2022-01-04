@@ -9,7 +9,10 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,7 +24,9 @@ import me.specifies.AnimalCrossing.Events.NewPlayerLogin;
 import me.specifies.AnimalCrossing.Events.PageTraversal;
 import me.specifies.AnimalCrossing.Events.PreventInventoryMovement;
 import me.specifies.AnimalCrossing.Events.RemovePlayerInstances;
+import me.specifies.AnimalCrossing.Exceptions.RecipeExceedsLimit;
 import me.specifies.AnimalCrossing.Inventories.ScrollingInventory;
+import me.specifies.AnimalCrossing.Utils.RecipeManager;
 import me.specifies.AnimalCrossing.Utils.SQLManager;
 import net.md_5.bungee.api.ChatColor;
 
@@ -38,11 +43,11 @@ public class Main extends JavaPlugin {
 	
 	public void onEnable() {
 		
-		// get the main instance so we can refer to it in other classes
-		instance = this;
-		
 		// save default config
 		this.saveDefaultConfig();
+		
+		// get the main instance so we can refer to it in other classes
+		instance = this;
 		
 		// log started
 		System.out.print("Animal Crossing Started");
@@ -68,6 +73,9 @@ public class Main extends JavaPlugin {
 		
 		// process our configured recipes and register them
 		processRecipes();
+		
+		// register our configured recipes to the bukkit stack
+		registerRecipes();
 	}
 	
 	public void onDisable() {
@@ -182,6 +190,43 @@ public class Main extends JavaPlugin {
 			// create a formatted array and put it in our recipse hashmap for later manipulation.
 			String[] formatted = {name, permission, itemType, itemresult};
 			recipes.put(ChatColor.stripColor(this.color(name)), formatted);
+		}
+		
+	}
+	
+	/*
+	 * Function to register all of our configured recipes to the stack
+	 */
+	private void registerRecipes() {
+		
+		// loop through each recipe in our recipes
+		for(Map.Entry<String, String[]> entry: recipes.entrySet()) {
+			
+			// generate a recipe hashmap
+			HashMap<Integer, String> recipe = this.processRecipe(entry.getValue()[3]);
+			
+			// first try clause will ensure the recipe doesn't exceed the limit
+			try {
+				RecipeManager rcpManager = new RecipeManager(recipe, entry.getValue()[0], new ItemStack(Material.valueOf(entry.getValue()[2]), 1));
+				
+				// second try clause makes sure that everything is registered properly
+				try {
+					
+					// get the generated recipe
+					ShapedRecipe finalRecipe = rcpManager.getGeneratedRecipe();
+					
+					// add the generated recipe to the stack
+					Bukkit.addRecipe(finalRecipe);
+					
+					// log that the recipe was registered
+					System.out.println("Registered the recipe " + ChatColor.stripColor(this.color(entry.getValue()[0])) + " to the stack.");
+				} catch(Exception err) {
+					err.printStackTrace();
+				}
+			} catch(RecipeExceedsLimit err) {
+				err.printStackTrace();
+			}
+		
 		}
 		
 	}
