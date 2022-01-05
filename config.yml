@@ -1,5 +1,15 @@
 sql-lite-file: players.db
 
+resources:
+    OAK_LOG:
+        type: "tree"
+        drop:
+            sapling: OAK_SAPLING
+            leaf: OAK_LEAVES
+            log: OAK_LOG
+            sapling_name: "&cApple Sapling"
+            durability: 3
+
 recipes:
     basicaxe:
         name: "&3Basic Axe"
@@ -47,4 +57,15 @@ recipes:
             - 6:WHEAT_SEEDS
             - 7:WHEAT_SEEDS
             - 8:WHEAT_SEEDS
+    sturdyaxe:
+        name: "&bSturdy Axe"
+        permission: animalcrossing.items.sturdyaxe
+        item: IRON_AXE
+        cost: 5000
+        recipe:
+            - 0:IRON_INGOT
+            - 1:IRON_INGOT
+            - 3:IRON_INGOT
+            - 4:IRON_BLOCK
+            - 7:STICK
 

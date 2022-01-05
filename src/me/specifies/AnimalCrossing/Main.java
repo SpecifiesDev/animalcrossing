@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +27,7 @@ import me.specifies.AnimalCrossing.Events.NewPlayerLogin;
 import me.specifies.AnimalCrossing.Events.PageTraversal;
 import me.specifies.AnimalCrossing.Events.PreventInventoryMovement;
 import me.specifies.AnimalCrossing.Events.RemovePlayerInstances;
+import me.specifies.AnimalCrossing.Events.ResourceInteraction;
 import me.specifies.AnimalCrossing.Exceptions.RecipeExceedsLimit;
 import me.specifies.AnimalCrossing.Inventories.ScrollingInventory;
 import me.specifies.AnimalCrossing.Utils.RecipeManager;
@@ -42,6 +44,9 @@ public class Main extends JavaPlugin {
 	
 	// instance of our parsed recipes
 	private HashMap<String, String[]> recipes = new HashMap<>();
+		
+	// hashmap storing harvested resources
+	private HashMap<Location, Integer> resources = new HashMap<>();
 	
 	public void onEnable() {
 		
@@ -106,6 +111,10 @@ public class Main extends JavaPlugin {
 		return recipes;
 	}
 	
+	public HashMap<Location, Integer> getResources() {
+		return resources;
+	}
+	
 	public static Main getInstance() {
 		return instance;
 	}
@@ -168,6 +177,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PageTraversal(), this);
 		pm.registerEvents(new RemovePlayerInstances(), this);
 		pm.registerEvents(new CheckIfPlayerHasRecipe(), this);
+		pm.registerEvents(new ResourceInteraction(), this);
 		
 	}
 	
@@ -195,6 +205,8 @@ public class Main extends JavaPlugin {
 			// create a formatted array and put it in our recipse hashmap for later manipulation.
 			String[] formatted = {name, permission, itemType, itemresult, cost};
 			recipes.put(ChatColor.stripColor(this.color(name)), formatted);
+			
+		
 		}
 		
 	}
