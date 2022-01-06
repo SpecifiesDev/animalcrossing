@@ -3,9 +3,9 @@ package me.specifies.AnimalCrossing.Constants;
 public interface PlayerAlerts {
 	
 	// General Logging
-	public static String WELCOME_MESSAGE = "&aWelcome to Zimma&8. &aWe hope you enjoy our get-away package&8. &aYou've received &6500 &abells as part of our rewards program&8.";
-	public static String INSUFFICIENT_BALANCE = "&cSorry&8, &cbut it would appear you don't have enough bells to purchase this&8.";
-	public static String PURCHASE_SUCESSFUL = "&aYou have purchased the item %s&8.";
+	public static final String WELCOME_MESSAGE = "&aWelcome to Zimma&8. &aWe hope you enjoy our get-away package&8. &aYou've received &6500 &abells as part of our rewards program&8.";
+	public static final String INSUFFICIENT_BALANCE = "&cSorry&8, &cbut it would appear you don't have enough bells to purchase this&8.";
+	public static final String PURCHASE_SUCESSFUL = "&aYou have purchased the item %s&8.";
 	
 	// Errors
 	public static String ERROR_SUPERADMIN_REQUIRED = "&cSorry&8, &cbut you must be a superadmin to use this command&8.";

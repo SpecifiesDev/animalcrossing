@@ -5,9 +5,10 @@ resources:
         type: "tree"
         drop:
             sapling: OAK_SAPLING
+            sapling_name: "&cApple Sapling"
             leaf: OAK_LEAVES
             log: OAK_LOG
-            sapling_name: "&cApple Sapling"
+            item: APPLE:3
             durability: 3
 
 recipes:
